@@ -10,13 +10,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
+import { db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
 export default function NotesScreenAdd() {
   const navigation = useNavigation();
   const [noteTitle, setNoteTitle] = useState("");
-
-  async function savePost() {}
-
+  async function savePost() {
+    await addDoc(collection(db, "notes"), { title: noteTitle });
+    navigation.goBack();
+  }
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -32,7 +34,6 @@ export default function NotesScreenAdd() {
         onChangeText={(text) => setNoteTitle(text)}
         selectionColor={"gray"}
       />
-
       <View style={{ flex: 1 }} />
       <TouchableOpacity
         style={styles.button}
@@ -43,7 +44,6 @@ export default function NotesScreenAdd() {
     </KeyboardAvoidingView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
